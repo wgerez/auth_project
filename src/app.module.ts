@@ -5,6 +5,7 @@ import { ItemsModule } from './items/items.module';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config/configuration';
 import { validationSchema } from './config/validation';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -16,6 +17,9 @@ import { validationSchema } from './config/validation';
       load: [configuration],
       validationSchema,
     }),
+    MongooseModule.forRoot(
+      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.el4bf.mongodb.net/${process.env.MONGO_DB}`,
+    ),
   ],
   controllers: [],
   providers: [],
