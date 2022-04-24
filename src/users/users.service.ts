@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private usersModule: Model<UserDocument>,
+    @InjectModel(User.name) private usersModel: Model<UserDocument>,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.usersModule.find();
+    return await this.usersModel.find();
   }
 
   findOne(id: number) {
