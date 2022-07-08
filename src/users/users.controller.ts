@@ -13,6 +13,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { plainToClass, plainToInstance } from 'class-transformer';
+import { UserSerializer } from './serializers/user.serializer';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -22,18 +24,21 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserSerializer> {
+    const data = await this.usersService.create(createUserDto);
+    return plainToInstance(UserSerializer, data, { excludeExtraneousValues: true });
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(): Promise<UserSerializer[]> {
+    const data = await this.usersService.findAll();
+    return plainToInstance(UserSerializer, data, { excludeExtraneousValues: true });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<UserSerializer> {
+    const data = await this.usersService.findOne(id);
+    return plainToInstance(UserSerializer, data, { excludeExtraneousValues: true });
   }
 
   @Patch(':id')
